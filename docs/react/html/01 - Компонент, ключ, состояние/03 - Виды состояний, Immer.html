@@ -1,37 +1,53 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>03 - Виды состояний, Immer</title>
-  <style>
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-
-ul.task-list[class]{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-font-size: inherit;
-width: 0.8em;
-margin: 0 0.8em 0.2em -1.6em;
-vertical-align: middle;
+    <title></title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>hljs.highlightAll();</script>
+    <style>* {
+  box-sizing: border-box;
 }
-.display.math{display: block; text-align: center; margin: 0.5rem auto;}
-</style>
-  <style type="text/css">body {background-color: green;}</style>
+
+
+html {
+  scroll-behavior: smooth;
+
+  text-align: justify;       /* Выравнивание по ширине */
+  text-align-last: left;     /* Последняя строка - по левому краю */
+  hyphens: auto;             /* Перенос слов (опционально) */
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1E1E1E;
+}
+
+
+h1 {
+  font-size: 2.5rem;
+}
+
+
+.content {
+  max-width: 800px;
+  padding: 20px;
+  margin: 0 auto;
+  background-color: #FFC6A3;
+}</style>
 </head>
 <body>
-<h1 id="виды-состояний">Виды состояний</h1>
-<h2 id="состояние-примитив">Состояние-примитив</h2>
-<p>Было рассмотрено при объяснении хука useState.</p>
-<h2 id="состояние-объект">Состояние-объект</h2>
-<p>Когда состояние представлено объектом, мы придерживаемся правила
-иммутабельности - сам объект не изменяем, а предоставляем сеттеру новый
-объект:</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+  <section class="content">
+    <h1 id="виды-состояний">Виды состояний</h1>
+    <h2 id="состояние-примитив">Состояние-примитив</h2>
+    <p>Было рассмотрено при объяснении хука useState.</p>
+    <h2 id="состояние-объект">Состояние-объект</h2>
+    <p>Когда состояние представлено объектом, мы придерживаемся правила
+    иммутабельности - сам объект не изменяем, а предоставляем сеттеру
+    новый объект:</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 const Counter = () =&gt; {
   const [data, setData] = useState({x: 5, y: 10});
@@ -60,12 +76,12 @@ const Counter = () =&gt; {
 }
 
 export default Counter;</code></pre>
-<p>Когда объект большой, в нем много полей и если они к тому же вложены
-друг в друга, то переписывать целиком такой объект не удобно. В этих
-случаях нам поможет оператор разбиения <code>...</code> (см. конспект по
-Javascript, если не понятно как он работает и как именно помогает в
-данном случае):</p>
-<pre class="react"><code>const [info, setInfo] = useState({  // &lt;-- Объект со множеством полей
+    <p>Когда объект большой, в нем много полей и если они к тому же
+    вложены друг в друга, то переписывать целиком такой объект не
+    удобно. В этих случаях нам поможет оператор разбиения
+    <code>...</code> (см. конспект по Javascript, если не понятно как он
+    работает и как именно помогает в данном случае):</p>
+    <pre class="react"><code>const [info, setInfo] = useState({  // &lt;-- Объект со множеством полей
   firstName: &#39;Alan&#39;,
   lastName: &#39;Wake&#39;,
   profession: &#39;writer&#39;
@@ -77,7 +93,7 @@ const changeReality = () =&gt; {
     profession: &#39;crazy man with a gun&#39;
   });
 }</code></pre>
-<pre class="react"><code>const [info, setInfo] = useState({  // &lt;-- Объект со вложенными полями
+    <pre class="react"><code>const [info, setInfo] = useState({  // &lt;-- Объект со вложенными полями
   name: {
     firstName: &#39;Alan&#39;,
     lastName: &#39;Walker&#39;
@@ -94,17 +110,17 @@ const changeReality = () =&gt; {
     }
   });
 }</code></pre>
-<p>В целом же стоит избегать глубоких вложений в состоянии и
-проектировать его так, чтобы оно было как можно более плоским.</p>
-<h2 id="состояние-массив">Состояние-массив</h2>
-<p>Когда состояние является массивом, мы должны сохранять
-иммутабельность: любая операция изменения состава массива (удаление,
-добавление) выполняется через создание нового массива, копирования в
-него элементов из старого, и установки нового массива в качестве
-состояния.</p>
-<h3 id="добавление-в-конец-начало-массива">Добавление в конец  начало
-массива</h3>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <p>В целом же стоит избегать глубоких вложений в состоянии и
+    проектировать его так, чтобы оно было как можно более плоским.</p>
+    <h2 id="состояние-массив">Состояние-массив</h2>
+    <p>Когда состояние является массивом, мы должны сохранять
+    иммутабельность: любая операция изменения состава массива (удаление,
+    добавление) выполняется через создание нового массива, копирования в
+    него элементов из старого, и установки нового массива в качестве
+    состояния.</p>
+    <h3 id="добавление-в-конец-начало-массива">Добавление в конец
+     начало массива</h3>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -130,11 +146,12 @@ export default function Words() {
     &lt;/div&gt;
   )
 }</code></pre>
-<p>Добавление <strong>в начало</strong> можно сделать так:
-<code>setWords([{id: wordId, word: word}, ...words])</code></p>
-<h3 id="удаление-из-массива">Удаление из массива</h3>
-<p>Делается через фильтрацию методом <code>filter</code> массива:</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <p>Добавление <strong>в начало</strong> можно сделать так:
+    <code>setWords([{id: wordId, word: word}, ...words])</code></p>
+    <h3 id="удаление-из-массива">Удаление из массива</h3>
+    <p>Делается через фильтрацию методом <code>filter</code>
+    массива:</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -169,9 +186,9 @@ export default function Words() {
     &lt;/div&gt;
   )
 }</code></pre>
-<h3 id="изменение-всех-элементов">Изменение всех элементов</h3>
-<p>Делается методом <code>.map()</code> массива:</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <h3 id="изменение-всех-элементов">Изменение всех элементов</h3>
+    <p>Делается методом <code>.map()</code> массива:</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -195,10 +212,11 @@ export default function Words() {
     &lt;/&gt;
   )
 }</code></pre>
-<h3 id="замена-конкретного-элемента">Замена конкретного элемента</h3>
-<p>Тоже делается методом <code>.map()</code> массива. Просто пишем
-условие так, чтобы заменился только один элемент:</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <h3 id="замена-конкретного-элемента">Замена конкретного
+    элемента</h3>
+    <p>Тоже делается методом <code>.map()</code> массива. Просто пишем
+    условие так, чтобы заменился только один элемент:</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -225,14 +243,15 @@ export default function Words() {
     &lt;/&gt;
   )
 }</code></pre>
-<h3 id="вставка-элемента-в-середину-массива">Вставка элемента в середину
-массива</h3>
-<p>Делается комбинацией метода <code>.slice()</code> массива и оператора
-разбиения. Методом slice возвращаем новый массив от начала до места
-вставки, разбиваем полученный массив, потом ставим новый элемент, и
-опять методом slice возвращаем новый массив от места вставки до конца,
-разбиваем его и все это вместе заворачиваем в новый массив:</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <h3 id="вставка-элемента-в-середину-массива">Вставка элемента в
+    середину массива</h3>
+    <p>Делается комбинацией метода <code>.slice()</code> массива и
+    оператора разбиения. Методом slice возвращаем новый массив от начала
+    до места вставки, разбиваем полученный массив, потом ставим новый
+    элемент, и опять методом slice возвращаем новый массив от места
+    вставки до конца, разбиваем его и все это вместе заворачиваем в
+    новый массив:</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -265,14 +284,16 @@ export default function Words() {
     &lt;/div&gt;
   )
 }</code></pre>
-<h3 id="сортировка-инверсия-массива">Сортировка, инверсия массива</h3>
-<p>Методы <code>.sort()</code> и <code>.reverse()</code> мутируют
-массив. Поэтому сначала делаем копию существующего массива, затем эту
-копию сортируем  инвертируем и устанавливаем в качестве нового
-состояния. Стоит помнить, что копия <em>поверхностная</em>, т.е. хоть
-массив новый, но он содержит ссылки на исходные элементы, поэтому менять
-их нельзя, т.к. иначе получится что мы изменим и исходное состояние.</p>
-<pre class="react"><code>import {useState} from &#39;react&#39;;
+    <h3 id="сортировка-инверсия-массива">Сортировка, инверсия
+    массива</h3>
+    <p>Методы <code>.sort()</code> и <code>.reverse()</code> мутируют
+    массив. Поэтому сначала делаем копию существующего массива, затем
+    эту копию сортируем  инвертируем и устанавливаем в качестве нового
+    состояния. Стоит помнить, что копия <em>поверхностная</em>, т.е.
+    хоть массив новый, но он содержит ссылки на исходные элементы,
+    поэтому менять их нельзя, т.к. иначе получится что мы изменим и
+    исходное состояние.</p>
+    <pre class="react"><code>import {useState} from &#39;react&#39;;
 
 export default function Words() {
   const [words, setWords] = useState([
@@ -304,12 +325,13 @@ export default function Words() {
     &lt;/div&gt;
   )
 }</code></pre>
-<p>В примере разбито на три строчки для наглядности, а кратко делаем
-так:
-<code>setWords([...words].sort((a, b) =&gt; a.word.localeCompare(b.word)));</code></p>
-<h2 id="библиотека-immer">Библиотека Immer</h2>
-<p>Чтобы сделать работу с иммутабельным состоянием удобнее и нагляднее,
-существует библиотека <code>Immer</code>. Если я о ней и напишу, то это
-будет отдельный конспект.</p>
+    <p>В примере разбито на три строчки для наглядности, а кратко делаем
+    так:
+    <code>setWords([...words].sort((a, b) =&gt; a.word.localeCompare(b.word)));</code></p>
+    <h2 id="библиотека-immer">Библиотека Immer</h2>
+    <p>Чтобы сделать работу с иммутабельным состоянием удобнее и
+    нагляднее, существует библиотека <code>Immer</code>. Если я о ней и
+    напишу, то это будет отдельный конспект.</p>
+  </section>
 </body>
 </html>
